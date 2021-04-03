@@ -1,0 +1,13 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<form action="{% url 'close' %}" method="POST">
+ <div class="form-group">
+        {% csrf_token %}
+
+        {{ formcl.as_p }}
+
+    </div>
+    <input type="Submit" value="Close">
+</form>
+{% endblock %}

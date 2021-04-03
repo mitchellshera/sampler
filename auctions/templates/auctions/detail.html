@@ -1,0 +1,77 @@
+{% extends "auctions/layout.html" %}
+
+ {% block title %}{{ auction.title }} - Auction {% endblock %}
+{% block body %}
+
+ <h6>{{ auction.description}}</h6>
+
+  <h1> {{ auction.title }} </h1>
+    <div class="wrapper">
+     {% if not own_auction %}
+        {% if auction.is_active %}
+        <!-- <div class="bid_box"> -->
+        <form action="{% url 'bid' auction.id %}" method="post">
+        <!-- <form action="/auctions/{{ auction.id }}/bid/" method="post"> -->
+        {% csrf_token %}
+        <div class=\"input_label\">
+        {% if error_message %}<p class="error" ><strong>{{ error_message }}</strong></p>{% endif %}
+        {% if already_bid %}
+            <h3> Current bid: {{ bid_amount }} </h3>
+        {% endif %}
+        <span>Enter amount ($):</span>
+        <span class="required_field" >*</span>
+        </div>
+        <input class="textbox" type="text" class="input_box" name="amount">
+        <br>
+        <a><input class="submit_button" type="submit" class="submit_button" value="Bid"></a>
+        </form>
+        <br>
+        <!-- </div> -->
+        {% endif %}
+     {% endif %}
+        <div class="wrapper">
+         <span class="auction-card">
+          <span><img class="auction_image_index" src="{{ auction.image }}"></span>
+            {% if auction.is_active %}
+                {% if auction.remaining_minutes < 2 %}
+                    <div class="auction-card-urgent">Time is running out</div>
+                {% else %}
+                    <div class="auction-card-active">Active</div>
+                {% endif %}
+            {% else %}
+            <div class="auction-card-inactive">Expired</div>
+            {% endif %}
+            <div class="auction-card-value">{{ auction.min_value }}$</div>
+          </span>
+        </div>
+        {% if auction.desc %}
+         <div class="wrapper">
+             <div class="desc_box">
+         <div class="desc_box_title">Description</div>
+         <hr>
+         {{ auction.desc }}
+                 <hr>
+                 <a  href="{% url 'watchlist'  %}" >Add To Watchlist</a>
+
+                  <a href="{% url 'comments' auction.id %}">Add Comment</a>
+         {% for comment in auction.comments.all %}
+
+         <div class="comment">
+         <div class="date">{{ comment.date_posted }}</div>
+         <strong>{{ comment.user }}</strong>
+         <p>{{ comment.comments|linebreaks }}</p>
+         </div>
+
+
+          {% endfor %}
+
+         </div>
+         </div>
+        {% if own_auction %}
+       <a class="active" href="{% url 'close' %}">Close</a>
+        {% endif %}
+    </div>
+        {% endif %}
+      </div>
+
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+
+    <h1>Home Supplies</h1>
+{% if listing %}
+    <div class="wrapper">
+    {% for auction in listing %}
+        <a class="auction-card" href="{% url 'detail' auction.id %}">
+            <div><img class="auction_image_index" src="{{ auction.image }}"></div>
+            <div class="auction-card-title">{{ auction.title }}</div>
+            <div class="auction-card-desc">{{ auction.desc }}</div>
+            {% if auction.is_active %}
+                {% if auction.remaining_minutes < 2 %}
+                    <div class="auction-card-urgent">Time is running out</div>
+                {% else %}
+                    <div class="auction-card-active">active</div>
+                {% endif %}
+            {% else %}
+            <div class="auction-card-inactive">Expired</div>
+            {% endif %}
+            <div class="auction-card-value">Current value:${{ auction.min_value }}</div>
+        </a>
+        <!-- <li class="auction-card"><a href="{% url 'detail' auction.id %}">{{ auction.title }}</a></li> -->
+    {% endfor %}
+    </div>
+{% else %}
+    <h4>No auctions are available.</h4>
+{% endif %}
+
+{% endblock %}

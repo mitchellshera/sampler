@@ -1,0 +1,17 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<h1>Add Comment</h1>
+<br>
+<div class="form-group">
+    <form  method="POST">
+        {% csrf_token %}
+        {% if user.is_authenticated  %}
+        <h3>Comments</h3>
+        {{  CommentForm.as_p }}
+        <input type="submit" ><br><br>
+        {% endif %}
+    </form>
+</div>
+
+{% endblock %}
